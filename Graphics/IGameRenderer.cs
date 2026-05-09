@@ -17,7 +17,6 @@ public interface IGameRenderer
     void DrawString(string text, float x, float y, float fontSizeDip, bool bold, ColorRgba color);
     (float w, float h) MeasureString(string text, float fontSizeDip, bool bold);
 
-    /// <summary>Uploads RGBA bytes (width × height × 4), returns GL texture id.</summary>
     uint CreateTextureRgba(ReadOnlySpan<byte> rgba, int w, int h);
 
     void DrawTexture(uint texture, float x, float y, float w, float h, ColorRgba tint);

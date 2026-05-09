@@ -4,5 +4,5 @@ public static class GameConstants
 {
     public const int CanvasWidth  = 800;
     public const int CanvasHeight = 600;
-    public const int TickRate     = 16; // ~60 fps timer interval (ms)
+    public const int TickRate     = 16; 
 }

@@ -24,7 +24,6 @@ public abstract class GameObject
 
     public RectF Bounds => new(X, Y, Width, Height);
 
-    /// <summary>Axis-aligned bounding-box collision check.</summary>
     public bool CollidesWith(GameObject other) =>
         IsActive && other.IsActive && Bounds.IntersectsWith(other.Bounds);
 

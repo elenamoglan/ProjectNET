@@ -23,8 +23,8 @@ public sealed class TranslationService : ITranslationService, IDisposable
         DefaultRequestHeaders = { { "User-Agent", "VoidRunner/1.0" } }
     };
 
-    // ── Built-in fallback dictionary ─────────────────────────────────────
-    // key: (text, langCode)  →  translated string
+    // Built-in fallback dictionary
+    // key: (text, langCode) -> translated string
     private static readonly Dictionary<(string, string), string> Fallback = new()
     {
         // Romanian
@@ -96,7 +96,6 @@ public sealed class TranslationService : ITranslationService, IDisposable
         if (_cache.TryGetValue(cacheKey, out var cached))
             return Task.FromResult(cached);
 
-        // Built-ins first — avoids flaky network / rate limits for UI strings we already know.
         if (Fallback.TryGetValue((text, targetLang), out var dictHit))
         {
             _cache[cacheKey] = dictHit;

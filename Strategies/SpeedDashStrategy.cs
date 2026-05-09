@@ -33,7 +33,7 @@ public sealed class SpeedDashStrategy : IMovementStrategy
         else if (_dashCooldown <= 0f)
         {
             // Predict ahead: 0.4s look-ahead
-            float predX = _target.X; // simplified; full prediction needs velocity
+            float predX = _target.X;
             float predY = _target.Y;
 
             float dx = predX - enemy.X;

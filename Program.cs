@@ -34,7 +34,6 @@ internal static class Program
         }
         catch
         {
-            // If logging fails, preserve the original exception behavior.
         }
     }
 }

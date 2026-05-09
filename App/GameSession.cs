@@ -455,7 +455,6 @@ internal sealed class GameSession
 
     public bool GoPhaseIsAskAgain() => _gameOver && _goPhase == GameOverPhase.AskPlayAgain;
 
-    /// <summary> True while any game-over modal flow is active (blocks in-game pause toggling).</summary>
     public bool GameOverBlocksPause() => _gameOver;
 
     public HashSet<Key> MovementKeys => _keys;

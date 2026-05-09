@@ -69,7 +69,6 @@ public sealed class GameApplication : IDisposable
     private bool           _mouseLeftPrev;
     private string _scoresBody = "";
 
-    /// <summary>Signalled from translator threads — consumed on <see cref="OnUpdate"/> (main loop).</summary>
     private int _menuTextsRefreshPending;
 
     public GameApplication()
@@ -183,7 +182,6 @@ public sealed class GameApplication : IDisposable
         _session.Update(dt);
     }
 
-    /// <summary>Returns true during name/play-again overlays (blocks pause and movement).</summary>
     private bool HandleGameOverlayInput()
     {
         if (_session is null) return false;

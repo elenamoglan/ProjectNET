@@ -110,7 +110,6 @@ void main(){ vec4 t=texture(uTex,vUv); fragColor=vec4(uColor.rgb*t.rgb, uColor.a
         _initialized = true;
     }
 
-    /// <summary>SDL frequently reports framebuffer 0×0 until the native window exists — fall back to <see cref="IWindow.Size"/>.</summary>
     private void ApplyFramebufferDimensions(int fbWidth, int fbHeight)
     {
         int w = fbWidth > 0 ? fbWidth : _window.Size.X;
@@ -184,7 +183,6 @@ void main(){ vec4 t=texture(uTex,vUv); fragColor=vec4(uColor.rgb*t.rgb, uColor.a
         int fx = _window.FramebufferSize.X;
         int fy = _window.FramebufferSize.Y;
 
-        // SDL sometimes leaves drawable size at 0×0 before the OS window is realised.
         if (fx < 1 || fy < 1)
             ApplyFramebufferDimensions(Math.Max(1, _window.Size.X), Math.Max(1, _window.Size.Y));
         else if (fx != _vw || fy != _vh)
@@ -503,7 +501,6 @@ void main(){ vec4 t=texture(uTex,vUv); fragColor=vec4(uColor.rgb*t.rgb, uColor.a
         }
         catch (InvalidOperationException)
         {
-            // GL context can already be torn down if the process is terminated abruptly.
         }
     }
 }

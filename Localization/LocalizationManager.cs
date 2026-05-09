@@ -23,20 +23,16 @@ public sealed class LocalizationManager
         _translator = translator;
     }
 
-    /// <summary>
     /// Switch language and pre-translate all known UI keys.
-    /// </summary>
     public async Task SetLanguageAsync(string langCode)
     {
         await _loadLock.WaitAsync().ConfigureAwait(false);
         try
         {
-            // Allow first warm-up when _lang already matches but cache is still empty.
             if (langCode == _lang && _cache.Count > 0) return;
             _lang = langCode;
             _cache.Clear();
 
-            // Pre-warm cache with common strings (sequential avoids unsafe Dictionary writes).
             string[] keys =
             [
                 "Play", "High Scores", "Quit", "Game Over",
@@ -68,7 +64,6 @@ public sealed class LocalizationManager
         }
     }
 
-    /// <summary>Returns the cached translation or the key itself as fallback.</summary>
     public string Get(string key) =>
         _cache.TryGetValue(key, out var val) ? val : key;
 

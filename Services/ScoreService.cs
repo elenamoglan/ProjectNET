@@ -41,7 +41,6 @@ public sealed class ScoreService
         var scores = await LoadAsync();
         scores.Add(entry);
 
-        // Keep top MaxEntries by score descending
         var trimmed = scores
             .OrderByDescending(s => s.Score)
             .Take(MaxEntries)
