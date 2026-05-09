@@ -9,15 +9,7 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <RootNamespace>VoidRunner</RootNamespace>
     <AssemblyName>VoidRunner</AssemblyName>
-
-    <!-- Keep source files in the existing VoidRunner/ folder while allowing `dotnet run` from repo root. -->
-    <EnableDefaultItems>false</EnableDefaultItems>
   </PropertyGroup>
-
-  <ItemGroup>
-    <Compile Include="VoidRunner/**/*.cs"
-             Exclude="VoidRunner/**/bin/**;VoidRunner/**/obj/**" />
-  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
