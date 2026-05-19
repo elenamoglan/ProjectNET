@@ -2,17 +2,15 @@ using VoidRunner.Models;
 
 namespace VoidRunner.Strategies;
 
-/// <summary>
-/// Predicts player position a short time ahead, then dashes toward it.
-/// Demonstrates: predictive AI, state machine (idle / dashing).
-/// </summary>
+// Predicts player position a short time ahead, then dashes toward it.
+
 public sealed class SpeedDashStrategy : IMovementStrategy
 {
     private Player? _target;
-    private float   _dashCooldown = 1.2f;
-    private float   _dirX, _dirY;
-    private bool    _isDashing;
-    private float   _dashTimer;
+    private float _dashCooldown = 1.2f;
+    private float _dirX, _dirY;
+    private bool _isDashing;
+    private float _dashTimer;
     private const float DashDuration = 0.3f;
 
     public void SetTarget(Player player) => _target = player;
@@ -46,8 +44,8 @@ public sealed class SpeedDashStrategy : IMovementStrategy
                 _dirY = dy / dist;
             }
 
-            _isDashing    = true;
-            _dashTimer    = DashDuration;
+            _isDashing = true;
+            _dashTimer = DashDuration;
             _dashCooldown = 1.0f + Random.Shared.NextSingle() * 0.6f;
         }
         else

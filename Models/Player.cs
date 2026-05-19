@@ -2,10 +2,8 @@ using VoidRunner.Graphics;
 
 namespace VoidRunner.Models;
 
-/// <summary>
-/// Player-controlled ship. Reacts to WASD / arrow keys.
-/// Demonstrates: encapsulation, readonly collections, clamping, invincibility frames.
-/// </summary>
+// Player-controlled ship. Reacts to WASD / arrow keys.
+
 public sealed class Player : GameObject
 {
     public const float Speed = 260f;
@@ -18,9 +16,9 @@ public sealed class Player : GameObject
     public int Lives { get; set; } = 3;
     public bool IsInvincible => _invincibilityTimer > 0f;
 
-    private static readonly ColorRgba ShipColor   = ColorRgba.FromArgb(255, 0, 200, 255);
+    private static readonly ColorRgba ShipColor = ColorRgba.FromArgb(255, 0, 200, 255);
     private static readonly ColorRgba ThrustColor = ColorRgba.FromArgb(160, 255, 130, 0);
-    private static readonly ColorRgba OutlineCol  = ColorRgba.FromArgb(255, 255, 255, 255);
+    private static readonly ColorRgba OutlineCol = ColorRgba.FromArgb(255, 255, 255, 255);
 
     public Player(float x, float y, HashSet<KeyCode> pressedKeys)
         : base(x, y, 24, 28)
@@ -57,7 +55,7 @@ public sealed class Player : GameObject
     {
         if (_invincibilityTimer <= 0f) return;
         _invincibilityTimer -= deltaTime;
-        _blinkAccum         += deltaTime;
+        _blinkAccum += deltaTime;
     }
 
     public void TriggerInvincibility() => _invincibilityTimer = InvincibilityDuration;

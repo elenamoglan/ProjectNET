@@ -24,22 +24,14 @@ public sealed unsafe class GlRenderer2D : IGameRenderer, IDisposable
     private readonly record struct TextCacheKey(string Text, float Size, bool Bold);
     private readonly record struct TexEntry(nint Id, float W, float H);
 
-    // -------------------------------------------------------------------------
-    // Construction — SdlContext is NOT needed here anymore
-    // -------------------------------------------------------------------------
-
     public GlRenderer2D(Sdl sdl, Window* window)
     {
         _sdl = sdl;
         _window = window;
     }
 
-    public int Width  => _vw > 0 ? _vw : GameConstants.CanvasWidth;
+    public int Width => _vw > 0 ? _vw : GameConstants.CanvasWidth;
     public int Height => _vh > 0 ? _vh : GameConstants.CanvasHeight;
-
-    // -------------------------------------------------------------------------
-    // Init / teardown
-    // -------------------------------------------------------------------------
 
     public void Init()
     {
@@ -68,10 +60,6 @@ public sealed unsafe class GlRenderer2D : IGameRenderer, IDisposable
         _vh = h;
     }
 
-    // -------------------------------------------------------------------------
-    // Frame lifecycle
-    // -------------------------------------------------------------------------
-
     public void BeginFrame()
     {
         if (!_initialized) return;
@@ -86,10 +74,6 @@ public sealed unsafe class GlRenderer2D : IGameRenderer, IDisposable
         if (!_initialized) return;
         _sdl.RenderPresent(_renderer);
     }
-
-    // -------------------------------------------------------------------------
-    // Drawing primitives
-    // -------------------------------------------------------------------------
 
     public void FillRect(float x, float y, float w, float h, ColorRgba fill)
     {
@@ -127,7 +111,7 @@ public sealed unsafe class GlRenderer2D : IGameRenderer, IDisposable
         const int seg = 36;
         for (int i = 0; i < seg; i++)
         {
-            float t0 = i       / (float)seg * MathF.Tau;
+            float t0 = i / (float)seg * MathF.Tau;
             float t1 = (i + 1) / (float)seg * MathF.Tau;
             _sdl.RenderDrawLineF(_renderer,
                 cx + MathF.Cos(t0) * rx, cy + MathF.Sin(t0) * ry,
@@ -144,9 +128,9 @@ public sealed unsafe class GlRenderer2D : IGameRenderer, IDisposable
         {
             // Rasterise each triangle as scanlines
             FillTriangle(
-                verts[0].x,   verts[0].y,
-                verts[i].x,   verts[i].y,
-                verts[i+1].x, verts[i+1].y);
+                verts[0].x, verts[0].y,
+                verts[i].x, verts[i].y,
+                verts[i + 1].x, verts[i + 1].y);
         }
     }
 
@@ -166,7 +150,7 @@ public sealed unsafe class GlRenderer2D : IGameRenderer, IDisposable
             float segH = secondHalf ? cy - by : by - ay;
             if (segH < 0.001f) segH = 0.001f;
             float alpha = (y - ay) / totalH;
-            float beta  = secondHalf ? (y - by) / segH : (y - ay) / segH;
+            float beta = secondHalf ? (y - by) / segH : (y - ay) / segH;
             float x1 = ax + (cx - ax) * alpha;
             float x2 = secondHalf ? bx + (cx - bx) * beta : ax + (bx - ax) * beta;
             if (x1 > x2) (x1, x2) = (x2, x1);
@@ -186,10 +170,6 @@ public sealed unsafe class GlRenderer2D : IGameRenderer, IDisposable
         pts[n] = pts[0]; // close the loop
         _sdl.RenderDrawLinesF(_renderer, pts, n + 1);
     }
-
-    // -------------------------------------------------------------------------
-    // Text
-    // -------------------------------------------------------------------------
 
     public void DrawString(string text, float x, float y, float fontSizeDip, bool bold, ColorRgba color)
     {
@@ -214,7 +194,7 @@ public sealed unsafe class GlRenderer2D : IGameRenderer, IDisposable
         Font font = fam.CreateFont(size, bold ? FontStyle.Bold : FontStyle.Regular);
         TextOptions textOpts = new(font);
         FontRectangle bounds = TextMeasurer.MeasureBounds(text, textOpts);
-        int tw = Math.Max(1, (int)MathF.Ceiling(bounds.Width)  + 3);
+        int tw = Math.Max(1, (int)MathF.Ceiling(bounds.Width) + 3);
         int th = Math.Max(1, (int)MathF.Ceiling(bounds.Height) + 3);
 
         using Image<Rgba32> img = new(tw, th, new Rgba32(0, 0, 0, 0));
@@ -237,10 +217,6 @@ public sealed unsafe class GlRenderer2D : IGameRenderer, IDisposable
         foreach (FontFamily family in SystemFonts.Collection.Families) return family;
         throw new InvalidOperationException("No fonts available.");
     }
-
-    // -------------------------------------------------------------------------
-    // Textures
-    // -------------------------------------------------------------------------
 
     public uint CreateTextureRgba(ReadOnlySpan<byte> rgba, int w, int h)
         => (uint)(nint)CreateSdlTextureRgba(rgba, w, h);
@@ -281,19 +257,11 @@ public sealed unsafe class GlRenderer2D : IGameRenderer, IDisposable
         _sdl.DestroyTexture((Texture*)(nint)texture);
     }
 
-    // -------------------------------------------------------------------------
-    // Helpers
-    // -------------------------------------------------------------------------
-
     private void SetDrawColor(ColorRgba c)
     {
         _sdl.SetRenderDrawColor(_renderer, c.R, c.G, c.B, c.A);
         _sdl.SetRenderDrawBlendMode(_renderer, BlendMode.Blend);
     }
-
-    // -------------------------------------------------------------------------
-    // Dispose
-    // -------------------------------------------------------------------------
 
     public void Dispose()
     {

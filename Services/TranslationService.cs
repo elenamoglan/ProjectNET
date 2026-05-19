@@ -4,15 +4,13 @@ using System.Text.Json;
 
 namespace VoidRunner.Services;
 
-/// <summary>
-/// Translates strings via the free MyMemory API (no key required).
-/// Falls back to a built-in dictionary on failure.
-/// Demonstrates: async/await, HttpClient, pattern matching, interfaces.
-/// </summary>
+// Translates strings via the free MyMemory API (no key required).
+// Falls back to a built-in dictionary on failure.
+
 public interface ITranslationService
 {
     Task<string> TranslateAsync(string text, string targetLang);
-    string       GetLanguageName(string code);
+    string GetLanguageName(string code);
 }
 
 public sealed class TranslationService : ITranslationService, IDisposable
@@ -115,8 +113,8 @@ public sealed class TranslationService : ITranslationService, IDisposable
             string url = $"https://api.mymemory.translated.net/get" +
                          $"?q={Uri.EscapeDataString(text)}&langpair=en|{targetLang}";
 
-            var json   = await Http.GetStringAsync(url);
-            using var doc   = JsonDocument.Parse(json);
+            var json = await Http.GetStringAsync(url);
+            using var doc = JsonDocument.Parse(json);
             string? result = doc.RootElement
                 .GetProperty("responseData")
                 .GetProperty("translatedText")
@@ -144,7 +142,7 @@ public sealed class TranslationService : ITranslationService, IDisposable
         "ro" => "Română",
         "es" => "Español",
         "fr" => "Français",
-        _    => code.ToUpperInvariant()
+        _ => code.ToUpperInvariant()
     };
 
     public void Dispose() => Http.Dispose();

@@ -2,10 +2,7 @@ using VoidRunner.Graphics;
 
 namespace VoidRunner.Models;
 
-/// <summary>
-/// Abstract base for every entity drawn on the game canvas.
-/// Demonstrates: abstract classes, properties, virtual methods.
-/// </summary>
+// Abstract base for every entity drawn on the game canvas.
 public abstract class GameObject
 {
     public float X { get; set; }

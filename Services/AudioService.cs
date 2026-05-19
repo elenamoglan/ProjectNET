@@ -2,24 +2,22 @@ using Silk.NET.OpenAL;
 
 namespace VoidRunner.Services;
 
-/// <summary>
-/// Short synthesized cues via OpenAL Soft (<see cref="Silk.NET.OpenAL"/> +
-/// <c>Silk.NET.OpenAL.Soft.Native</c>). Silent if the device fails to initialize.
-/// </summary>
+// Short synthesized cues via OpenAL Soft. Silent if the device fails to initialize.
+
 public sealed unsafe class AudioService : IDisposable
 {
     private const int SampleRate = 22050;
 
     private ALContext? _alc;
-    private AL?        _al;
+    private AL? _al;
 
     private nint _deviceNative;
     private nint _contextNative;
 
     private uint[] _buffers = [];
     private uint[] _sources = [];
-    private int    _spin;
-    private bool   _alive;
+    private int _spin;
+    private bool _alive;
 
     public bool IsMuted { get; set; }
 
@@ -29,7 +27,7 @@ public sealed unsafe class AudioService : IDisposable
     {
         try
         {
-            _alc          = ALContext.GetApi(true);
+            _alc = ALContext.GetApi(true);
             Device* device = _alc.OpenDevice("");
             if ((nint)device == 0)
             {
@@ -61,10 +59,10 @@ public sealed unsafe class AudioService : IDisposable
 
             _al = AL.GetApi(true);
 
-            short[] pcmHit       = sineTone(520f, 0.065f, 0.55f);
-            short[] pcmMenu      = sineTone(900f, 0.068f, 0.52f);
-            short[] pcmPause     = sineTone(420f, 0.098f, 0.42f);
-            short[] pcmGameOver  = GameOverChime();
+            short[] pcmHit = sineTone(520f, 0.065f, 0.55f);
+            short[] pcmMenu = sineTone(900f, 0.068f, 0.52f);
+            short[] pcmPause = sineTone(420f, 0.098f, 0.42f);
+            short[] pcmGameOver = GameOverChime();
 
             uint[] buffers = _al.GenBuffers(4);
             _al.BufferData(buffers[0], BufferFormat.Mono16, pcmHit, SampleRate);
@@ -195,7 +193,7 @@ public sealed unsafe class AudioService : IDisposable
 
     private static float RampEnds(int index, int total, int edge)
     {
-        float up   = edge > 0 ? MathF.Min(index / (float)edge, 1f) : 1f;
+        float up = edge > 0 ? MathF.Min(index / (float)edge, 1f) : 1f;
         float down = edge > 0 ? MathF.Min((total - 1 - index) / (float)edge, 1f) : 1f;
         return MathF.Min(up, down);
     }

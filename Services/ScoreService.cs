@@ -3,13 +3,11 @@ using VoidRunner.Models;
 
 namespace VoidRunner.Services;
 
-/// <summary>
-/// Persists high scores to a local JSON file.
-/// Demonstrates: async file I/O, generic lists, LINQ ordering.
-/// </summary>
+// Persists high scores to a local JSON file.
+
 public sealed class ScoreService
 {
-    private const int    MaxEntries = 10;
+    private const int MaxEntries = 10;
     private readonly string _filePath;
 
     public ScoreService()

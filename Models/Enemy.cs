@@ -5,26 +5,24 @@ namespace VoidRunner.Models;
 
 public enum EnemyType { Chaser, Speeder, Wanderer }
 
-/// <summary>
-/// Enemy entity. Uses a Strategy pattern so movement logic is swappable.
-/// Demonstrates: composition over inheritance, constructor injection.
-/// </summary>
+// Enemy entity. Uses a Strategy pattern so movement logic is swappable.
+
 public sealed class Enemy : GameObject
 {
-    public EnemyType Type     { get; }
-    public float     BaseSpeed { get; }
+    public EnemyType Type { get; }
+    public float BaseSpeed { get; }
 
     private readonly IMovementStrategy _movement;
-    private readonly ColorRgba        _color;
-    private readonly float            _radius;
+    private readonly ColorRgba _color;
+    private readonly float _radius;
 
     public static Enemy Create(EnemyType type, float x, float y, float speedMultiplier)
     {
         var (size, speed, color, strategy) = type switch
         {
-            EnemyType.Chaser   => (20f, 90f  * speedMultiplier, ColorRgba.FromArgb(255, 220, 60, 60),   (IMovementStrategy)new ChaserStrategy()),
-            EnemyType.Speeder  => (14f, 170f * speedMultiplier, ColorRgba.FromArgb(255, 255, 200, 40),   new SpeedDashStrategy()),
-            EnemyType.Wanderer => (26f, 65f  * speedMultiplier, ColorRgba.FromArgb(255, 100, 80, 200),    new WanderStrategy()),
+            EnemyType.Chaser => (20f, 90f * speedMultiplier, ColorRgba.FromArgb(255, 220, 60, 60), (IMovementStrategy)new ChaserStrategy()),
+            EnemyType.Speeder => (14f, 170f * speedMultiplier, ColorRgba.FromArgb(255, 255, 200, 40), new SpeedDashStrategy()),
+            EnemyType.Wanderer => (26f, 65f * speedMultiplier, ColorRgba.FromArgb(255, 100, 80, 200), new WanderStrategy()),
             _ => throw new ArgumentOutOfRangeException(nameof(type))
         };
 
@@ -35,10 +33,10 @@ public sealed class Enemy : GameObject
         float baseSpeed, ColorRgba color, IMovementStrategy movement)
         : base(x, y, size, size)
     {
-        Type      = type;
+        Type = type;
         BaseSpeed = baseSpeed;
-        _color    = color;
-        _radius   = size / 2f;
+        _color = color;
+        _radius = size / 2f;
         _movement = movement;
     }
 
@@ -58,8 +56,8 @@ public sealed class Enemy : GameObject
 
         string symbol = Type switch
         {
-            EnemyType.Chaser   => "\u25B2",
-            EnemyType.Speeder  => "\u25BA",
+            EnemyType.Chaser => "\u25B2",
+            EnemyType.Speeder => "\u25BA",
             EnemyType.Wanderer => "\u25C6",
             _ => "?"
         };

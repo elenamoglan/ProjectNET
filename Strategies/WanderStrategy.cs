@@ -2,10 +2,8 @@ using VoidRunner.Models;
 
 namespace VoidRunner.Strategies;
 
-/// <summary>
-/// Wanders randomly; occasionally locks onto the player briefly.
-/// Demonstrates: timer-driven state transitions, random behaviour.
-/// </summary>
+// Wanders randomly; occasionally locks onto the player briefly.
+
 public sealed class WanderStrategy : IMovementStrategy
 {
     private Player? _target;

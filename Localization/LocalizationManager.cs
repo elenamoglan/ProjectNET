@@ -2,16 +2,13 @@ using VoidRunner.Services;
 
 namespace VoidRunner.Localization;
 
-/// <summary>
-/// Manages the current UI language and caches translated strings.
-/// Demonstrates: singleton-like service, async initialisation, events.
-/// </summary>
+// Manages the current UI language and caches translated strings.
 public sealed class LocalizationManager
 {
-    private readonly ITranslationService          _translator;
-    private readonly Dictionary<string, string>   _cache = new();
-    private readonly SemaphoreSlim                  _loadLock = new(1, 1);
-    private          string                         _lang  = "en";
+    private readonly ITranslationService _translator;
+    private readonly Dictionary<string, string> _cache = new();
+    private readonly SemaphoreSlim _loadLock = new(1, 1);
+    private string _lang = "en";
 
     public event Action? LanguageChanged;
 
@@ -23,7 +20,6 @@ public sealed class LocalizationManager
         _translator = translator;
     }
 
-    /// Switch language and pre-translate all known UI keys.
     public async Task SetLanguageAsync(string langCode)
     {
         await _loadLock.WaitAsync().ConfigureAwait(false);
