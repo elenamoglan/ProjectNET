@@ -287,6 +287,3 @@ __pycache__/
 *.btm.cs
 *.odx.cs
 *.xsd.cs
-
-# Local skeleton extract (not part of the game)
-_skeleton_tmp/
