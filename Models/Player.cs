@@ -1,4 +1,3 @@
-using Silk.NET.Input;
 using VoidRunner.Graphics;
 
 namespace VoidRunner.Models;
@@ -12,7 +11,7 @@ public sealed class Player : GameObject
     public const float Speed = 260f;
     private const float InvincibilityDuration = 1.5f;
 
-    private readonly HashSet<Key> _pressedKeys;
+    private readonly HashSet<KeyCode> _pressedKeys;
     private float _invincibilityTimer;
     private float _blinkAccum;
 
@@ -23,7 +22,7 @@ public sealed class Player : GameObject
     private static readonly ColorRgba ThrustColor = ColorRgba.FromArgb(160, 255, 130, 0);
     private static readonly ColorRgba OutlineCol  = ColorRgba.FromArgb(255, 255, 255, 255);
 
-    public Player(float x, float y, HashSet<Key> pressedKeys)
+    public Player(float x, float y, HashSet<KeyCode> pressedKeys)
         : base(x, y, 24, 28)
     {
         _pressedKeys = pressedKeys;
@@ -39,10 +38,10 @@ public sealed class Player : GameObject
     {
         float dx = 0f, dy = 0f;
 
-        if (_pressedKeys.Contains(Key.W) || _pressedKeys.Contains(Key.Up)) dy -= 1f;
-        if (_pressedKeys.Contains(Key.S) || _pressedKeys.Contains(Key.Down)) dy += 1f;
-        if (_pressedKeys.Contains(Key.A) || _pressedKeys.Contains(Key.Left)) dx -= 1f;
-        if (_pressedKeys.Contains(Key.D) || _pressedKeys.Contains(Key.Right)) dx += 1f;
+        if (_pressedKeys.Contains(KeyCode.W) || _pressedKeys.Contains(KeyCode.Up)) dy -= 1f;
+        if (_pressedKeys.Contains(KeyCode.S) || _pressedKeys.Contains(KeyCode.Down)) dy += 1f;
+        if (_pressedKeys.Contains(KeyCode.A) || _pressedKeys.Contains(KeyCode.Left)) dx -= 1f;
+        if (_pressedKeys.Contains(KeyCode.D) || _pressedKeys.Contains(KeyCode.Right)) dx += 1f;
 
         if (dx != 0f && dy != 0f)
         {

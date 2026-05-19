@@ -1,4 +1,3 @@
-using Silk.NET.Input;
 using VoidRunner.Graphics;
 using VoidRunner.Localization;
 using VoidRunner.Models;
@@ -21,7 +20,7 @@ internal sealed class GameSession
     private readonly LocalizationManager _locale;
     private readonly ScoreService _scoreService;
     private readonly AudioService _audio;
-    private readonly HashSet<Key> _keys = [];
+    private readonly HashSet<KeyCode> _keys = [];
     private readonly Action _exitToMenu;
 
     private Player _player = null!;
@@ -457,5 +456,5 @@ internal sealed class GameSession
 
     public bool GameOverBlocksPause() => _gameOver;
 
-    public HashSet<Key> MovementKeys => _keys;
+    public HashSet<KeyCode> MovementKeys => _keys;
 }

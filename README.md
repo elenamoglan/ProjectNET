@@ -1,11 +1,11 @@
 # Void Runner
 
-A small arcade-style survival game: dodge enemies, survive waves, and chase a high score. Built with **C#** and **Silk.NET** (SDL windowing, OpenGL rendering, OpenAL audio).
+A small arcade-style survival game: dodge enemies, survive waves, and chase a high score. Built with **C#** and **Silk.NET**.
 
 ## Requirements
 
 - [.NET SDK 10](https://dotnet.microsoft.com/download) (LTS)
-- **Windows** is the primary target (OpenGL 3.3 core, SDL2 native dependencies via NuGet)
+- **Windows** is the primary target 
 
 ## Run
 
@@ -52,23 +52,25 @@ Saved on your machine under:
 
 `%LocalAppData%\VoidRunner\`
 
-| File          | Purpose                          |
-|---------------|----------------------------------|
-| `scores.json` | Top high scores (JSON)        |
+| File          | Purpose                                            |
+| ------------- | -------------------------------------------------- |
+| `scores.json` | Top high scores (JSON)                             |
 | `crash.log`   | Last unhandled exception text (if the app crashes) |
 
 ## Tech stack
 
 - **.NET 10**, nullable reference types, warnings treated as errors
-- **Silk.NET** — windowing (SDL), input, OpenGL, OpenAL
+- **Silk.NET.SDL** — `PollEvent` loop, `GetKeyboardState`, mouse button state
+- **SDL2** — 2D rendering
 - **SixLabors.ImageSharp** / **Fonts** — text rendering to textures
 - **Newtonsoft.Json** — high-score persistence
 
 ## Project layout
 
-- `Program.cs` — entry point
+- `Program.cs` — entry point (starts `GameApplication`)
+- `SdlContext.cs`, `KeyCodes.cs`, `MouseButton.cs` — SDL input helpers
 - `App/` — application loop, menu, game session
-- `Graphics/` — 2D OpenGL renderer
+- `Graphics/` — 2D SDL renderer
 - `Models/` — player, enemies, constants
 - `Strategies/` — enemy movement strategies
 - `Services/` — audio, scores, translation
