@@ -58,8 +58,10 @@ public sealed class SdlContext : INativeContext, IDisposable
         }
     }
 
-    public IntPtr GetProcAddress(string proc, int? slot = null) =>
-        NativeLibrary.GetExport(_nativeLibrary, proc);
+    public IntPtr GetProcAddress(string proc, int? slot = null)
+    {
+        return NativeLibrary.GetExport(_nativeLibrary, proc);
+    }
 
     public bool TryGetProcAddress(string proc, [UnscopedRef] out IntPtr addr, int? slot = null)
     {
@@ -75,9 +77,19 @@ public sealed class SdlContext : INativeContext, IDisposable
         return addr != IntPtr.Zero;
     }
 
-    public void Dispose()
+    private void ReleaseUnmanagedResources()
     {
         NativeLibrary.Free(_nativeLibrary);
+    }
+
+    public void Dispose()
+    {
+        ReleaseUnmanagedResources();
         GC.SuppressFinalize(this);
+    }
+
+    ~SdlContext()
+    {
+        ReleaseUnmanagedResources();
     }
 }
