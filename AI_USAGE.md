@@ -37,18 +37,21 @@ Used Cursor's inline AI suggestions while writing `TranslationService.cs` and `S
 
 ## Files I wrote, with AI fixes applied
 
-| File                             | Tool   | What AI changed                                         |
-| -------------------------------- | ------ | ------------------------------------------------------- |
-| `Services/TranslationService.cs` | Cursor | JSON parsing, async patterns                            |
-| `Services/ScoreService.cs`       | Cursor | Async file I/O, JSON serialization patterns             |
-| `App/GameApplication.cs`         | Claude | Helped with `Run` function                              |
-| `App/GameSession.cs`             | Claude | Helped with `UpdateLiveGame` and `SpawnEnemy` functions |
+| File                                  | Tool   | What AI changed                                                                                           |
+| ------------------------------------- | ------ | --------------------------------------------------------------------------------------------------------- |
+| `Services/TranslationService.cs`      | Cursor | JSON parsing and dictionary                                                                               |
+| `Services/ScoreService.cs`            | Cursor | Async file I/O, JSON serialization patterns                                                               |
+| `App/GameApplication.cs`              | Claude | Helped with `Run` function                                                                                |
+| `App/GameSession.cs`                  | Claude | Helped with `UpdateLiveGame` and `SpawnEnemy` functions                                                   |
+| `Services/AudioService.cs`            | Claude | Helped with computing sounds as PCM (pulse-code modulation, raw audio samples) in memory                  |
+| `Localization/LocalizationManager.cs` | Claude | Helped with the async funtions                                                                            |
+| `Graphics/GlRenderer2D.cs`            | Claude | Helped with the fill funtions formulas and the ImageSharp pipeline for rasterising text to an SDL texture |
 
 ---
 
 ## Files entirely my own work
 
-- `Graphics/GlRenderer2D.cs`
+-
 - `Graphics/IGameRenderer.cs`
 - `Graphics/RectF.cs`
 - `Graphics/ColorRgba.cs`
@@ -58,12 +61,9 @@ Used Cursor's inline AI suggestions while writing `TranslationService.cs` and `S
 - `Strategies/WanderStrategy.cs`
 - `Models/GameObject.cs`
 - `Models/Enemy.cs`
-- `Models/Player.cs` (original, before AI edits)
+- `Models/Player.cs`
 - `Models/HighScore.cs`
 - `Models/GameConstants.cs`
-- `Services/AudioService.cs`
 - `Program.cs`
-- `App/GameApplication.cs` (original, before AI edits)
-- `App/GameSession.cs` (original, before AI edits)
 
 ---

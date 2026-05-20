@@ -20,6 +20,7 @@ public sealed class LocalizationManager
         _translator = translator;
     }
 
+    // AI-generated
     public async Task SetLanguageAsync(string langCode)
     {
         await _loadLock.WaitAsync().ConfigureAwait(false);
@@ -59,6 +60,7 @@ public sealed class LocalizationManager
             _loadLock.Release();
         }
     }
+    // end AI-generated
 
     public string Get(string key) =>
         _cache.TryGetValue(key, out var val) ? val : key;

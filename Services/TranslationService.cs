@@ -21,6 +21,7 @@ public sealed class TranslationService : ITranslationService, IDisposable
         DefaultRequestHeaders = { { "User-Agent", "VoidRunner/1.0" } }
     };
 
+    // AI-generated
     // Built-in fallback dictionary
     // key: (text, langCode) -> translated string
     private static readonly Dictionary<(string, string), string> Fallback = new()
@@ -83,9 +84,11 @@ public sealed class TranslationService : ITranslationService, IDisposable
             ("Enter confirm · Esc cancel", "fr"), "Entrée — confirmer · Échap — annuler"
         },
     };
+    // end AI-generated
 
     private readonly ConcurrentDictionary<string, string> _cache = new();
 
+    // AI-generated
     public Task<string> TranslateAsync(string text, string targetLang)
     {
         if (targetLang == "en") return Task.FromResult(text);
@@ -102,6 +105,7 @@ public sealed class TranslationService : ITranslationService, IDisposable
 
         return TranslateAsyncSlow(text, targetLang, cacheKey);
     }
+    // end AI-generated
 
     private async Task<string> TranslateAsyncSlow(string text, string targetLang, string cacheKey)
     {
@@ -110,8 +114,7 @@ public sealed class TranslationService : ITranslationService, IDisposable
 
         try
         {
-            string url = $"https://api.mymemory.translated.net/get" +
-                         $"?q={Uri.EscapeDataString(text)}&langpair=en|{targetLang}";
+            string url = $"https://api.mymemory.translated.net/get" + $"?q={Uri.EscapeDataString(text)}&langpair=en|{targetLang}";
 
             var json = await Http.GetStringAsync(url);
             using var doc = JsonDocument.Parse(json);

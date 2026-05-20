@@ -23,6 +23,7 @@ public sealed unsafe class AudioService : IDisposable
 
     public AudioService() => TryInit();
 
+    // AI-generated
     private void TryInit()
     {
         try
@@ -116,6 +117,8 @@ public sealed unsafe class AudioService : IDisposable
         }
     }
 
+    // end AI-generated
+
     public void PlayHit() => TryPlay(0);
 
     public void PlayMenuSelect() => TryPlay(1);
@@ -137,6 +140,7 @@ public sealed unsafe class AudioService : IDisposable
         _al.SourcePlay(src);
     }
 
+    // AI-generated
     private static short[] sineTone(float frequencyHz, float durationSec, float volume)
     {
         int samples = Math.Max(1, (int)(durationSec * SampleRate));
@@ -155,6 +159,7 @@ public sealed unsafe class AudioService : IDisposable
 
         return pcm;
     }
+    // end AI-generated
 
     private static short[] GameOverChime()
     {
@@ -185,6 +190,7 @@ public sealed unsafe class AudioService : IDisposable
         }
     }
 
+    // AI-generated
     private static short SaturateAdd(short a, short b)
     {
         int s = a + b;
@@ -197,6 +203,7 @@ public sealed unsafe class AudioService : IDisposable
         float down = edge > 0 ? MathF.Min((total - 1 - index) / (float)edge, 1f) : 1f;
         return MathF.Min(up, down);
     }
+    // end AI-generated
 
     public void Dispose()
     {

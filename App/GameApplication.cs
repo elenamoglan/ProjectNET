@@ -127,6 +127,7 @@ public sealed class GameApplication : IDisposable
         _drawableH = dh;
     }
 
+    // AI-generated
     public void Run()
     {
         bool quit = false;
@@ -209,6 +210,7 @@ public sealed class GameApplication : IDisposable
                 quit = true;
         }
     }
+    // end AI-generated
 
     private async Task WarmInitialLocaleAsync()
     {
@@ -344,6 +346,8 @@ public sealed class GameApplication : IDisposable
         return true;
     }
 
+
+    // AI-generated
     private void TryTypeChar(KeyCode k, char chLow)
     {
         if (_session is null || !_session.GoPhaseIsNameEntry()) return;
@@ -362,6 +366,7 @@ public sealed class GameApplication : IDisposable
 
         _session.NameChar(ch);
     }
+    // end AI-generated
 
     private void FillMovementKeys(HashSet<KeyCode> dest)
     {

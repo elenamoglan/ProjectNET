@@ -10,14 +10,14 @@ public sealed class ScoreService
     private const int MaxEntries = 10;
     private readonly string _filePath;
 
+    // AI-generated
     public ScoreService()
     {
-        string dir = Path.Combine(
-            Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
-            "VoidRunner");
+        string dir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "VoidRunner");
         Directory.CreateDirectory(dir);
         _filePath = Path.Combine(dir, "scores.json");
     }
+    // end AI-generated
 
     public async Task<List<HighScore>> LoadAsync()
     {

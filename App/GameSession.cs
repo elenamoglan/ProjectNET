@@ -49,11 +49,7 @@ internal sealed class GameSession
 
     private static readonly Random Rng = new();
 
-    public GameSession(
-        LocalizationManager locale,
-        ScoreService scoreService,
-        AudioService audio,
-        Action exitToMenu)
+    public GameSession(LocalizationManager locale, ScoreService scoreService, AudioService audio, Action exitToMenu)
     {
         _locale = locale;
         _scoreService = scoreService;
@@ -239,6 +235,7 @@ internal sealed class GameSession
     {
         _elapsed += dt;
         _spawnTimer += dt;
+        // AI-generated
         _waveAlpha = Math.Max(0f, _waveAlpha - dt * 0.8f);
 
         int newWave = (int)(_elapsed / 15f);
@@ -249,6 +246,7 @@ internal sealed class GameSession
             _spawnInterval = Math.Max(0.6f, 2.5f - _wave * 0.22f);
             _waveAlpha = 2.5f;
         }
+        // end AI-generated
 
         _player.Update(dt);
 
@@ -295,6 +293,7 @@ internal sealed class GameSession
         enemy.SetTarget(_player);
         _enemies.Add(enemy);
 
+        // AI-generated
         if (_wave > 0 && _wave % 3 == 0 && Rng.Next(3) == 0)
         {
             var (x2, y2) = RandomEdgePosition(EnemyType.Chaser);
@@ -302,6 +301,7 @@ internal sealed class GameSession
             bonus.SetTarget(_player);
             _enemies.Add(bonus);
         }
+        // end AI-generated
     }
 
     private static (float x, float y) RandomEdgePosition(EnemyType type)

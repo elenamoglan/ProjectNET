@@ -42,7 +42,7 @@ public sealed unsafe class GlRenderer2D : IGameRenderer, IDisposable
             throw new InvalidOperationException(
                 $"SDL_CreateRenderer failed: {_sdl.GetErrorS()}");
 
-        _sdl.SetHint("SDL_RENDER_SCALE_QUALITY", "1");
+        _sdl.SetHint("SDL_RENDER_SCALE_QUALITY", "1"); // bilinear filtering, makes scaled text less blocky
         _sdl.RenderSetLogicalSize(_renderer,
             GameConstants.CanvasWidth, GameConstants.CanvasHeight);
 
@@ -63,8 +63,8 @@ public sealed unsafe class GlRenderer2D : IGameRenderer, IDisposable
     public void BeginFrame()
     {
         if (!_initialized) return;
+        if (_renderer == null) return;
         PollDrawableSize();
-        // Match original glClearColor(0.024, 0.020, 0.058, 1)
         _sdl.SetRenderDrawColor(_renderer, 6, 5, 15, 255);
         _sdl.RenderClear(_renderer);
     }
@@ -91,13 +91,14 @@ public sealed unsafe class GlRenderer2D : IGameRenderer, IDisposable
         float cy = y + eh * 0.5f;
         float rx = ew * 0.5f;
         float ry = eh * 0.5f;
-        // Scanline fill — one horizontal rect per pixel row
+        // AI generated
         for (float dy = -ry; dy <= ry; dy += 1f)
         {
             float dx = rx * MathF.Sqrt(Math.Max(0f, 1f - (dy * dy) / (ry * ry)));
             var line = new FRect { X = cx - dx, Y = cy + dy, W = dx * 2f, H = 1f };
             _sdl.RenderFillRectF(_renderer, &line);
         }
+        // end AI generated
     }
 
     public void StrokeEllipse(float x, float y, float ew, float eh, ColorRgba stroke, float lineWidth)
@@ -108,7 +109,7 @@ public sealed unsafe class GlRenderer2D : IGameRenderer, IDisposable
         float cy = y + eh * 0.5f;
         float rx = ew * 0.5f;
         float ry = eh * 0.5f;
-        const int seg = 36;
+        const int seg = 36;  // 36 looks smooth enough, 24 was too chunky on larger enemies
         for (int i = 0; i < seg; i++)
         {
             float t0 = i / (float)seg * MathF.Tau;
@@ -123,7 +124,6 @@ public sealed unsafe class GlRenderer2D : IGameRenderer, IDisposable
     {
         if (!_initialized || verts.Length < 3) return;
         SetDrawColor(fill);
-        // Triangle fan from first vertex
         for (int i = 1; i < verts.Length - 1; i++)
         {
             // Rasterise each triangle as scanlines
@@ -134,6 +134,7 @@ public sealed unsafe class GlRenderer2D : IGameRenderer, IDisposable
         }
     }
 
+    // AI generated
     private void FillTriangle(float ax, float ay, float bx, float by, float cx, float cy)
     {
         // Sort vertices by Y
@@ -154,10 +155,11 @@ public sealed unsafe class GlRenderer2D : IGameRenderer, IDisposable
             float x1 = ax + (cx - ax) * alpha;
             float x2 = secondHalf ? bx + (cx - bx) * beta : ax + (bx - ax) * beta;
             if (x1 > x2) (x1, x2) = (x2, x1);
-            var line = new FRect { X = x1, Y = y, W = x2 - x1 + 1f, H = 1f };
+            var line = new FRect { X = x1, Y = y, W = x2 - x1 + 1f, H = 1f };  // +1 prevents single-pixel gaps between adjacent triangles
             _sdl.RenderFillRectF(_renderer, &line);
         }
     }
+    // end AI generated
 
     public void StrokePolygon(ReadOnlySpan<(float x, float y)> verts, ColorRgba stroke, float lineWidth)
     {
@@ -166,8 +168,10 @@ public sealed unsafe class GlRenderer2D : IGameRenderer, IDisposable
         int n = verts.Length;
         var pts = stackalloc FPoint[n + 1];
         for (int i = 0; i < n; i++)
+        {
             pts[i] = new FPoint { X = verts[i].x, Y = verts[i].y };
-        pts[n] = pts[0]; // close the loop
+        }
+        pts[n] = pts[0];
         _sdl.RenderDrawLinesF(_renderer, pts, n + 1);
     }
 
@@ -175,7 +179,7 @@ public sealed unsafe class GlRenderer2D : IGameRenderer, IDisposable
     {
         if (!_initialized) return;
         TexEntry te = EnsureTextTexture(text, fontSizeDip, bold);
-        DrawTextureInternal((Texture*)te.Id, x, y, te.W, te.H, color);
+        RenderTex((Texture*)te.Id, x, y, te.W, te.H, color);
     }
 
     public (float w, float h) MeasureString(string text, float fontSizeDip, bool bold)
@@ -184,6 +188,7 @@ public sealed unsafe class GlRenderer2D : IGameRenderer, IDisposable
         return (te.W, te.H);
     }
 
+    // AI generated
     private TexEntry EnsureTextTexture(string text, float size, bool bold)
     {
         var key = new TextCacheKey(text, size, bold);
@@ -194,6 +199,7 @@ public sealed unsafe class GlRenderer2D : IGameRenderer, IDisposable
         Font font = fam.CreateFont(size, bold ? FontStyle.Bold : FontStyle.Regular);
         TextOptions textOpts = new(font);
         FontRectangle bounds = TextMeasurer.MeasureBounds(text, textOpts);
+        // that +3 padding on text textures stops clipping on italic/bold glyphs
         int tw = Math.Max(1, (int)MathF.Ceiling(bounds.Width) + 3);
         int th = Math.Max(1, (int)MathF.Ceiling(bounds.Height) + 3);
 
@@ -210,12 +216,15 @@ public sealed unsafe class GlRenderer2D : IGameRenderer, IDisposable
         _textCache[key] = entry;
         return entry;
     }
+    // end AI generated
 
     private static FontFamily ResolveFontFamily()
     {
+        // Segoe on Windows, falls back to whatever
         if (SystemFonts.TryGet("Segoe UI", out FontFamily ui)) return ui;
-        foreach (FontFamily family in SystemFonts.Collection.Families) return family;
-        throw new InvalidOperationException("No fonts available.");
+        if (SystemFonts.TryGet("Arial", out FontFamily arial)) return arial;
+        foreach (FontFamily f in SystemFonts.Collection.Families) return f;
+        throw new InvalidOperationException("No fonts found.");
     }
 
     public uint CreateTextureRgba(ReadOnlySpan<byte> rgba, int w, int h)
@@ -240,9 +249,9 @@ public sealed unsafe class GlRenderer2D : IGameRenderer, IDisposable
     }
 
     public void DrawTexture(uint texture, float x, float y, float w, float h, ColorRgba tint)
-        => DrawTextureInternal((Texture*)(nint)texture, x, y, w, h, tint);
+        => RenderTex((Texture*)(nint)texture, x, y, w, h, tint);
 
-    private void DrawTextureInternal(Texture* tex, float x, float y, float fw, float fh, ColorRgba tint)
+    private void RenderTex(Texture* tex, float x, float y, float fw, float fh, ColorRgba tint)
     {
         if (!_initialized || tex == null) return;
         _sdl.SetTextureColorMod(tex, tint.R, tint.G, tint.B);
