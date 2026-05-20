@@ -1,6 +1,6 @@
 namespace VoidRunner.Models;
 
-// Immutable record for a single high-score entry.
+// Record for a single high-score entry.
 
 public record HighScore
 {
